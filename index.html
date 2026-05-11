@@ -23,6 +23,7 @@
             --particle-glow: rgba(37, 99, 235, 0.1);
         }
 
+        /* Fixed Smooth Scrolling natively via CSS */
         html {
             scroll-behavior: smooth;
             scroll-padding-top: 90px;
@@ -138,19 +139,18 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0; /* Changed from 999 so tracks go BEHIND the text cards */
+            z-index: 0; /* Keeps tracks BEHIND the text cards */
             pointer-events: none;
             opacity: 0.8;
         }
 
-        /* Full-width Hero Section */
+        /* Full-width Hero Section - Two Column Layout */
         .hero {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
             position: relative;
             overflow: hidden;
             color: white;
-            padding: 140px 20px 80px;
-            text-align: center;
+            padding: 180px 20px 100px;
             clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
         }
 
@@ -166,32 +166,52 @@
             pointer-events: none;
         }
 
-        .hero > * {
+        .hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row-reverse; /* THIS IS THE NEW LINE */
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
             position: relative;
             z-index: 2;
         }
 
+        .hero-text {
+            text-align: left;
+            flex: 1;
+        }
+
         .hero h1 {
-            font-size: 3.5em;
-            font-weight: 700;
-            margin: 0 0 10px 0;
+            font-size: 4em;
+            font-weight: 800;
+            margin: 0 0 5px 0;
             letter-spacing: -1px;
+            line-height: 1.1;
         }
 
         .hero .subtitle {
-            font-size: 1.2em;
+            font-size: 1.3em;
             color: #94a3b8;
             font-weight: 300;
-            max-width: 600px;
-            margin: 0 auto 20px auto;
+            margin: 0 0 15px 0;
+        }
+
+        .hero .location {
+             color: #cbd5e1;
+             margin: 0 0 25px 0;
+             font-size: 1.05em;
+             display: flex;
+             align-items: center;
+             gap: 8px;
         }
 
         .social-links {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            justify-content: flex-start;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 30px;
         }
 
         .social-links a {
@@ -213,6 +233,25 @@
             background: var(--accent-blue);
             transform: translateY(-2px);
             border-color: var(--accent-blue);
+        }
+
+        /* Profile Photo Styling */
+        .profile-photo {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-light);
         }
 
         /* Main Container */
@@ -488,7 +527,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 2000;
+            z-index: 3000;
             left: 0;
             top: 0;
             width: 100%;
@@ -568,9 +607,14 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5em;
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
             }
+            .hero-text { text-align: center; }
+            .hero h1 { font-size: 3em; }
+            .hero .location, .social-links { justify-content: center; }
             nav ul { gap: 15px; }
             nav a { font-size: 0.85em; }
             section { padding: 25px; }
@@ -609,15 +653,21 @@
     </div>
 
     <header class="hero" id="home">
-        <h1>Banajit Barman</h1>
-        <p class="subtitle">PhD Researcher in Experimental High-Energy Physics</p>
-        <p style="color: #cbd5e1; margin: 0;"><i class="fas fa-map-marker-alt"></i> Nalbari, India</p>
+        <div class="hero-content">
+            <img src="profile.png" alt="Banajit Barman" class="profile-photo">
 
-        <div class="social-links">
-            <a href="mailto:banajit.barman@cern.ch"><i class="fas fa-envelope"></i> Email</a>
-            <a href="https://orcid.org/" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
-            <a href="https://inspirehep.net/authors/2586681" target="_blank"><i class="fas fa-atom"></i> Inspire HEP</a>
-            <a href="https://github.com/BanajitBarman" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+            <div class="hero-text">
+                <h1>Banajit Barman</h1>
+                <p class="subtitle">PhD Researcher in Experimental High-Energy Physics</p>
+                <p class="location"><i class="fas fa-map-marker-alt"></i> Nalbari, India</p>
+
+                <div class="social-links">
+                    <a href="mailto:banajit.barman@cern.ch"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="https://orcid.org/" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+                    <a href="https://inspirehep.net/authors/2586681" target="_blank"><i class="fas fa-atom"></i> Inspire HEP</a>
+                    <a href="https://github.com/BanajitBarman" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -805,9 +855,8 @@
         window.addEventListener('resize', resize);
         resize();
 
-        let collisions = []; // Array to hold multiple concurrent collisions
+        let collisions = [];
 
-        // Spawns a new collision event at specific X,Y coordinates
         function spawnCollision(x, y) {
             collisions.push({
                 x: x,
@@ -822,16 +871,11 @@
             });
         }
 
-        // Generates the outgoing curved tracks
         function createParticles(collision) {
             const colors = ['#fbbf24', '#60a5fa', '#f87171', '#34d399', '#ffffff'];
-            // Create 70 tracks per collision
             for(let i=0; i < 70; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 5 + 2; // Initial momentum
-
-                // Simulate particle charge (+ or -) and magnetic field strength
-                // This determines how tight and in which direction the track curves
+                const speed = Math.random() * 5 + 2;
                 const charge = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 0.04 + 0.01);
 
                 collision.particles.push({
@@ -844,7 +888,6 @@
                     life: 1.0,
                     decay: Math.random() * 0.01 + 0.005,
                     color: colors[Math.floor(Math.random() * colors.length)],
-                    // Store the history of the particle to draw a continuous line
                     path: [{x: collision.x, y: collision.y}]
                 });
             }
@@ -857,7 +900,6 @@
             ctx.fillStyle = n.color;
             ctx.fill();
 
-            // Draw nucleons inside
             ctx.fillStyle = 'rgba(255,255,255,0.5)';
             ctx.beginPath(); ctx.arc(n.x - 4, n.y - 4, 5, 0, Math.PI*2); ctx.fill();
             ctx.beginPath(); ctx.arc(n.x + 6, n.y + 2, 4, 0, Math.PI*2); ctx.fill();
@@ -871,7 +913,6 @@
         function animate() {
             ctx.clearRect(0, 0, width, height);
 
-            // Loop backwards so we can safely remove finished collisions
             for (let i = collisions.length - 1; i >= 0; i--) {
                 let c = collisions[i];
 
@@ -882,13 +923,11 @@
                     drawNucleus(c.nuclei[0]);
                     drawNucleus(c.nuclei[1]);
 
-                    // Check for impact
                     if (c.nuclei[0].x + c.nuclei[0].radius >= c.nuclei[1].x - c.nuclei[1].radius) {
                         c.state = 'exploding';
                         createParticles(c);
                     }
                 } else if (c.state === 'exploding') {
-                    // Flash effect
                     if (c.flash > 0) {
                         ctx.fillStyle = `rgba(255, 255, 255, ${c.flash * 0.5})`;
                         ctx.beginPath();
@@ -897,11 +936,9 @@
                         c.flash -= 0.08;
                     }
 
-                    // Move and draw continuous curved tracks
                     for (let j = c.particles.length - 1; j >= 0; j--) {
                         let p = c.particles[j];
 
-                        // Apply magnetic Lorentz force (rotates the velocity vector)
                         let newVx = p.vx + p.vy * p.charge;
                         let newVy = p.vy - p.vx * p.charge;
                         p.vx = newVx;
@@ -911,27 +948,24 @@
                         p.y += p.vy;
                         p.life -= p.decay;
 
-                        // Save new position to the track path
                         p.path.push({x: p.x, y: p.y});
 
                         if (p.life <= 0) {
                             c.particles.splice(j, 1);
                         } else {
-                            // Draw the entire continuous track history
                             ctx.beginPath();
                             ctx.moveTo(p.path[0].x, p.path[0].y);
                             for(let k = 1; k < p.path.length; k++) {
                                 ctx.lineTo(p.path[k].x, p.path[k].y);
                             }
                             ctx.strokeStyle = p.color;
-                            ctx.globalAlpha = p.life; // Fades the track as the particle loses energy
+                            ctx.globalAlpha = p.life;
                             ctx.lineWidth = p.radius;
                             ctx.stroke();
                             ctx.globalAlpha = 1.0;
                         }
                     }
 
-                    // Remove collision event when all tracks fade out
                     if (c.particles.length === 0) {
                         collisions.splice(i, 1);
                     }
@@ -940,39 +974,20 @@
             requestAnimationFrame(animate);
         }
 
-        // Start animation loop
         animate();
 
-        // 1. Spawn initial collision in the center on load
-        setTimeout(() => spawnCollision(width / 2, 280), 300);
-
-        // 2. Click anywhere on the page to spawn a collision
-        window.addEventListener('click', (e) => {
-            spawnCollision(e.clientX, e.clientY);
-        });
-
-        // 3. Random background collisions every 5 seconds
-        setInterval(() => {
-            if(collisions.length < 2) {
-                spawnCollision(Math.random() * (width - 200) + 100, Math.random() * (height - 200) + 100);
-            }
-        }, 5000);
-       // Helper function to keep collisions strictly in the middle of the side banks
+        // Helper function to keep collisions strictly in the middle of the side banks
         function getSideBankX(forceRight = false) {
             const containerWidth = 940;
             const sideMargin = (width - containerWidth) / 2;
 
-            // If on a narrow screen, push it to the extreme right edge
             if (sideMargin < 120) {
                 return width - 50;
             }
 
-            // forceRight guarantees it spawns on the Right side
             if (forceRight || Math.random() > 0.5) {
-                // Exact middle of the Right blank space
                 return width - (sideMargin / 2);
             } else {
-                // Exact middle of the Left blank space
                 return sideMargin / 2;
             }
         }
@@ -985,19 +1000,17 @@
             const containerLeft = (window.innerWidth / 2) - 470;
             const containerRight = (window.innerWidth / 2) + 470;
 
-            // Allow manual clicks ONLY in the dark Hero header OR in the side margins
             if (e.clientY < 350 || e.clientX < containerLeft || e.clientX > containerRight) {
                 spawnCollision(e.clientX, e.clientY);
             }
         });
 
-        // 3. Random background collisions every 5 seconds (allows both left and right)
+        // 3. Random background collisions every 5 seconds
         setInterval(() => {
             if(collisions.length < 2) {
                 spawnCollision(getSideBankX(false), Math.random() * (height - 200) + 100);
             }
         }, 5000);
-
 
         /* ---------------------------------------------------
            Standard UI Scripts (Dark Mode, Modals, etc.)
@@ -1053,7 +1066,7 @@
         };
 
         citationBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent spawning a collision when opening the modal
+            e.stopPropagation();
             citationModal.style.display = 'block';
             const firstBtn = document.querySelector('.citation-format-btn');
             showCitationFormat(firstBtn, 'bibtex');
@@ -1074,7 +1087,6 @@
             citationModal.style.display = 'none';
         }
 
-        // Prevent clicks inside the modal from spawning collisions
         document.querySelector('.modal-content').addEventListener('click', (e) => {
             e.stopPropagation();
         });
@@ -1093,7 +1105,7 @@
         }
 
         function copyCitation(button) {
-            event.stopPropagation(); // Stop click from making a collision
+            event.stopPropagation();
             let textToCopy = "";
 
             if(button.parentElement.classList.contains('citation-box')) {

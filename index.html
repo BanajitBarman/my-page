@@ -138,8 +138,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 999; /* Below nav, above most content */
-            pointer-events: none; /* Allows clicking links through the canvas */
+            z-index: 0; /* Changed from 999 so tracks go BEHIND the text cards */
+            pointer-events: none;
             opacity: 0.8;
         }
 
@@ -955,6 +955,46 @@
         setInterval(() => {
             if(collisions.length < 2) {
                 spawnCollision(Math.random() * (width - 200) + 100, Math.random() * (height - 200) + 100);
+            }
+        }, 5000);
+       // Helper function to keep collisions strictly in the middle of the side banks
+        function getSideBankX(forceRight = false) {
+            const containerWidth = 940;
+            const sideMargin = (width - containerWidth) / 2;
+
+            // If on a narrow screen, push it to the extreme right edge
+            if (sideMargin < 120) {
+                return width - 50;
+            }
+
+            // forceRight guarantees it spawns on the Right side
+            if (forceRight || Math.random() > 0.5) {
+                // Exact middle of the Right blank space
+                return width - (sideMargin / 2);
+            } else {
+                // Exact middle of the Left blank space
+                return sideMargin / 2;
+            }
+        }
+
+        // 1. Spawn initial collision strictly on the RIGHT side bank
+        setTimeout(() => spawnCollision(getSideBankX(true), 350), 300);
+
+        // 2. Click to spawn (Restricted so you can't spawn them under the text cards)
+        window.addEventListener('click', (e) => {
+            const containerLeft = (window.innerWidth / 2) - 470;
+            const containerRight = (window.innerWidth / 2) + 470;
+
+            // Allow manual clicks ONLY in the dark Hero header OR in the side margins
+            if (e.clientY < 350 || e.clientX < containerLeft || e.clientX > containerRight) {
+                spawnCollision(e.clientX, e.clientY);
+            }
+        });
+
+        // 3. Random background collisions every 5 seconds (allows both left and right)
+        setInterval(() => {
+            if(collisions.length < 2) {
+                spawnCollision(getSideBankX(false), Math.random() * (height - 200) + 100);
             }
         }, 5000);
 

@@ -1,27 +1,962 @@
-<section>
-        <h2>Education</h2>
-        <ul class="achievements">
-            <li><strong>Ph.D. in High-Energy Physics</strong><br>
-            Gauhati University (Ongoing)<br>
-            <em>Supervisor: Prof. Buddhadeb Bhattacharjee</em></li>
-            <li><strong>Master of Education (M.Ed.)</strong><br>
-            (Ongoing)</li>
-        </ul>
-</section>
-<section>
-        <h2>Current Research</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banajit Barman | Experimental High-Energy Physics</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --primary-blue: #003366;
+            --accent-blue: #2563eb;
+            --accent-light: #60a5fa;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+            --particle-glow: rgba(37, 99, 235, 0.1);
+        }
+
+        /* Fixed Smooth Scrolling natively via CSS */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            --bg-page: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        body.dark-mode nav {
+            background-color: rgba(15, 23, 42, 0.95);
+        }
+
+        body.dark-mode section {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .badge {
+            background-color: #334155;
+            color: #93c5fd;
+            border-color: #475569;
+        }
+
+        body.dark-mode .badge:hover {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* Full-width Sticky Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover { color: var(--accent-light); }
+
+        /* Control Panel */
+        .nav-controls {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Full-width Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            position: relative;
+            overflow: hidden;
+            color: white;
+            padding: 140px 20px 80px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2em;
+            color: #94a3b8;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .social-links a:hover {
+            background: var(--accent-blue);
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: -40px auto 60px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Section Cards */
+        section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 45px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        section:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            color: var(--primary-dark);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+            margin-left: 15px;
+        }
+
+        body.dark-mode h2 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode h2::after {
+            background: #475569;
+        }
+
+        h3 {
+            color: var(--accent-blue);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Timeline for Education */
+        .timeline {
+            border-left: 3px solid #e2e8f0;
+            padding-left: 30px;
+            margin-left: 10px;
+        }
+
+        body.dark-mode .timeline {
+            border-left-color: #475569;
+        }
+
+        .timeline .entry {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .timeline .entry:last-child { margin-bottom: 0; }
+
+        .timeline .entry::before {
+            content: '';
+            position: absolute;
+            left: -38.5px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #e2e8f0;
+        }
+
+        body.dark-mode .timeline .entry::before {
+            border-color: #1e293b;
+            box-shadow: 0 0 0 2px #475569;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+
+        .entry-title { font-weight: 700; color: var(--text-main); font-size: 1.1em; }
+        .entry-date { color: var(--accent-blue); font-size: 0.9em; font-weight: 600; background: #eff6ff; padding: 4px 10px; border-radius: 20px; }
+
+        body.dark-mode .entry-date {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .entry-org { font-style: italic; color: var(--text-muted); margin-bottom: 10px; }
+
+        /* Lists & Links */
+        ul { padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 8px; }
+        strong { color: var(--text-main); }
+
+        a.content-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        a.content-link:hover {
+            color: var(--primary-blue);
+            border-bottom: 1px solid var(--primary-blue);
+        }
+
+        /* Skills Badges */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .badge {
+            background-color: #f8fafc;
+            color: var(--primary-blue);
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .badge:hover {
+            background-color: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Research Keywords */
+        .keywords-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .keyword {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(96, 165, 250, 0.1));
+            color: var(--accent-blue);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .keyword:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        body.dark-mode .keyword {
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        /* Citation Box */
+        .citation-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-blue);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        body.dark-mode .citation-box {
+            background: #334155;
+            border-left-color: var(--accent-light);
+        }
+
+        .citation-copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .inline-copy-btn {
+            background: #e2e8f0;
+            color: var(--primary-dark);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        body.dark-mode .inline-copy-btn {
+            background: #475569;
+            color: white;
+        }
+
+        .citation-copy-btn:hover, .inline-copy-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        #backToTop:hover {
+            background: var(--primary-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.6);
+        }
+
+        #backToTop.show {
+            display: flex;
+        }
+
+        /* Citation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: var(--text-muted);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: var(--text-main);
+        }
+
+        .citation-formats {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .citation-format-btn {
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .citation-format-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        body.dark-mode .citation-format-btn {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            nav a {
+                font-size: 0.85em;
+            }
+
+            section {
+                padding: 25px;
+            }
+
+            h2 {
+                font-size: 1.4em;
+            }
+
+            .entry-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .nav-controls {
+                gap: 5px;
+                right: 10px;
+            }
+
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
         <ul>
-            <li><strong>ALICE Experiment:</strong> Analyzing transverse momentum (\(p_T\)) spectra and particle identification (PID) in heavy-ion collisions using the ALICE O2 framework.</li>
-            <li><strong>Data Paper:</strong> Currently under review by the Internal Review Committee (IRC).</li>
-            <li><strong>Educational Research:</strong> Exploring pedagogical tools and analyzing gender gaps within secondary education systems in Assam.</li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#talks">Talks</a></li>
+            <li><a href="#skills">Skills</a></li>
         </ul>
-</section>
-<section>
-        <h2>Get In Touch</h2>
-        <p>I am always open to discussing high-energy physics research, data analysis, or educational planning.</p>
-        <ul>
-            <li><strong>Email:</strong> <a href="mailto:your.email@example.com">your.email@example.com</a></li>
-            <li><strong>GitHub:</strong> <a href="https://github.com/BanajitBarman" target="_blank">github.com/BanajitBarman</a></li>
-            <li><strong>Telegram:</strong> <a href="https://t.me/yourusername" target="_blank">@yourusername</a></li>
-        </ul>
-</section>
+    </nav>
+
+    <div class="nav-controls">
+        <button class="control-btn" id="citationBtn" title="Citation Formats">
+            <i class="fas fa-quote-right"></i> Cite
+        </button>
+        <a href="Banajit_Barman_CV.pdf" download class="control-btn" id="cvBtn" title="Download CV" style="text-decoration: none;">
+            <i class="fas fa-file-pdf"></i> CV
+        </a>
+        <button class="control-btn" id="darkModeToggle" title="Toggle Dark Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <header class="hero" id="home">
+        <h1>Banajit Barman</h1>
+        <p class="subtitle">PhD Researcher in Experimental High-Energy Physics</p>
+        <p style="color: #cbd5e1; margin: 0;"><i class="fas fa-map-marker-alt"></i> Nalbari, India</p>
+
+        <div class="social-links">
+            <a href="mailto:banajit.barman@cern.ch"><i class="fas fa-envelope"></i> Email</a>
+            <a href="https://orcid.org/" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+            <a href="https://inspirehep.net/authors/2586681" target="_blank"><i class="fas fa-atom"></i> Inspire HEP</a>
+            <a href="https://github.com/BanajitBarman" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section id="about">
+            <h2><i class="fas fa-microscope"></i> Research Focus</h2>
+            <p style="color: var(--text-muted); font-size: 1.05em;"><strong>Relativistic hadronic collisions experiments and phenomenology.</strong></p>
+            <p style="color: var(--text-muted);">As an active researcher within the ALICE Collaboration, my primary focus lies in unraveling the collective dynamics of the Quantum Chromodynamics (QCD) medium, currently driving my experimental analysis using the newly collected LHC Run 3 data. My work bridges experimental data analysis and phenomenological modeling, specifically targeting the emergence of medium-like behaviors in small and light-ion collision systems at the LHC energies.</p>
+            <p style="color: var(--text-muted);">By leveraging both experimental measurements and Monte Carlo event generators, I aim to disentangle the effects of true thermalized media from other QCD mechanisms. Beyond offline physics analysis, I actively participated in ALICE data taking during Run 3, serving as a Shift Leader for 30 days and an Experiment Control System (ECS) operator for 12 days. I also contributed directly to detector performance by involving in particle identification (PID) quality assurance for the TPC and TOF detectors.</p>
+
+            <div>
+                <h3 style="margin-top: 30px;">Research Keywords</h3>
+                <div class="keywords-cloud">
+                    <span class="keyword">Heavy-Ion Collisions</span>
+                    <span class="keyword">QCD Matter</span>
+                    <span class="keyword">Particle Identification</span>
+                    <span class="keyword">LHC Physics</span>
+                    <span class="keyword">Quark-Gluon Plasma</span>
+                    <span class="keyword">Monte Carlo Generators</span>
+                    <span class="keyword">Data Analysis</span>
+                    <span class="keyword">Detector Physics</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="education">
+            <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+            <div class="timeline">
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-title">PhD in Experimental High-Energy Physics</span>
+                        <span class="entry-date">Feb 2022 – Present</span>
+                    </div>
+                    <div class="entry-org">Gauhati University, India</div>
+                    <ul>
+                        <li>Collaborator in the ALICE experiment at CERN, Switzerland.</li>
+                        <li>Supervisor: <em>Prof. Buddhadeb Bhattacharjee</em></li>
+                        <li>Thesis: <em>Studies on light flavored particle production in RUN3 pp collisions using ALICE-TOF detector and MC data.</em></li>
+                    </ul>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-title">Master of Science (MSc) in Physics</span>
+                        <span class="entry-date">2019 – 2021</span>
+                    </div>
+                    <div class="entry-org">Gauhati University, India</div>
+                    <ul>
+                        <li>Specialization: Nuclear Physics and Electronics.</li>
+                    </ul>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-title">Bachelor of Science (BSc) in Physics</span>
+                        <span class="entry-date">2016 – 2019</span>
+                    </div>
+                    <div class="entry-org">Nalbari College, under Gauhati University, India</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="publications">
+            <h2><i class="fas fa-book"></i> Publications & Analysis</h2>
+
+            <h3>ALICE Papers / Analysis Notes</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--accent-blue);">
+                    <strong>Production of \(\pi^\pm\), \(K^\pm\), and \(p\) (\(\bar{p}\)) in \(pp\) collisions at \(\sqrt{s} = 13.6\) TeV</strong><br>
+                    <span style="font-size: 0.9em;">ALICE Collaboration</span><br>
+                    <a href="https://alice-publications.web.cern.ch/node/12688" class="content-link" target="_blank">Publication page</a> &bull;
+                    <a href="https://alice-notes.web.cern.ch/system/files/notes/analysis/1445/2025-07-02-AnalysisNote_PiKaPr_13_6_TeV_LHC24_pass1_MinBias.pdf" class="content-link" target="_blank">Analysis note</a>
+
+
+                </li>
+                <li style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--accent-blue);">
+                    <strong>Production and Nuclear Modification factor of light flavoured particles in OO collision at \(\sqrt{s_{NN}} = 5.36\) TeV</strong><br>
+                    <a href="https://alice-notes.web.cern.ch/node/1783" class="content-link" target="_blank">Analysis note</a>
+                </li>
+            </ul>
+
+            <h3 style="margin-top: 35px;">Selected Publications</h3>
+            <ol style="padding-left: 15px;">
+                <li style="margin-bottom: 15px;" class="publication-item">
+                    Tonmoy Sharma, <strong>Banajit Barman</strong>, and Buddhadeb Bhattacharjee.<br>
+                    <strong>"Production of heavy flavored particles in \(p+p\) collisions: A unified model description for ALICE and LHCb Measurements."</strong><br>
+                    <a href="https://doi.org/10.1103/sp93-wsth" class="content-link" target="_blank"><em>Physical Review C</em> <strong>113</strong>, 034918 (2026)</a>
+                    <button class="inline-copy-btn" onclick="copyCitation(this)"><i class="fas fa-copy"></i> Copy</button>
+                </li>
+                <li style="margin-bottom: 15px;" class="publication-item">
+                    <strong>Banajit Barman</strong>, Nur Hussain, and Buddhadeb Bhattacharjee.<br>
+                    <strong>"Baryon number transportation over full rapidity space in pp collisions at energies available at the CERN Large Hadron Collider."</strong><br>
+                    <a href="https://doi.org/10.1103/PhysRevC.111.014905" class="content-link" target="_blank"><em>Physical Review C</em> <strong>111</strong>, 014905 (2025)</a>
+                    <button class="inline-copy-btn" onclick="copyCitation(this)"><i class="fas fa-copy"></i> Copy</button>
+                </li>
+                <li class="publication-item">
+                    Pranjal Sarma, <strong>Banajit Barman</strong>, and Buddhadeb Bhattacharjee.<br>
+                    <strong>"Effect of color reconnection on multiplicity-dependent charged particle production in PYTHIA-generated pp collisions at the LHC energies."</strong><br>
+                    <a href="https://doi.org/10.1140/epja/s10050-023-00989-7" class="content-link" target="_blank"><em>Eur. Phys. J. A</em> <strong>59</strong>(4), 76 (2023)</a>
+                    <button class="inline-copy-btn" onclick="copyCitation(this)"><i class="fas fa-copy"></i> Copy</button>
+                </li>
+            </ol>
+        </section>
+
+        <section id="talks">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Talks & Presentations</h2>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <strong>Production of light-flavoured particles in ALICE Run 3 data for pp collisions</strong><br>
+                    <span style="font-size: 0.9em; color: var(--text-muted);">10th Asian Triangle Heavy-Ion Conference (ATHIC 2025), Berhampur, India. (Jan 2025)</span> <a href="https://indico.cern.ch/event/1424442/contributions/mine" class="content-link" target="_blank">[Talk]</a>
+                </li>
+                <li style="margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <strong>On Transportation of Baryon Number in pp Collision at \(\sqrt{s}\) = 0.9 and 7 TeV</strong><br>
+                    <span style="font-size: 0.9em; color: var(--text-muted);">10th Asian Triangle Heavy-Ion Conference (ATHIC 2025), Berhampur, India. (Jan 2025)</span> <a href="https://indico.cern.ch/event/1424442/contributions/mine" class="content-link" target="_blank">[Talk]</a>
+                </li>
+                <li style="margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;">
+                    <strong>Particle identification in O2Physics</strong><br>
+                    <span style="font-size: 0.9em; color: var(--text-muted);">O2 Analysis Tutorial 3.0, CERN, Switzerland. (Nov 2023)</span> <a href="https://indico.cern.ch/event/1326201/contributions/5597353/" class="content-link" target="_blank">[Talk]</a>
+                </li>
+                <li style="margin-bottom: 15px;">
+                    <strong>Multiplicity-dependent \(\pi\), \(K\), \(p\) production in pp collisions at 13.6 TeV using ALICE TPC and TOF detectors</strong><br>
+                    <span style="font-size: 0.9em; color: var(--text-muted);">Quark Matter 2023, Houston, TX, USA. (Sep 2023)</span> <a href="https://indico.cern.ch/event/1139644/contributions/5456378/" class="content-link" target="_blank">[Poster]</a>
+                </li>
+            </ul>
+        </section>
+
+        <section id="skills">
+            <h2><i class="fas fa-award"></i> Skills & Achievements</h2>
+
+            <h3>Technical Expertise</h3>
+            <div class="skills-container" style="margin-bottom: 30px;">
+                <span class="badge"><i class="fas fa-code"></i> C++</span>
+                <span class="badge"><i class="fab fa-python"></i> Python</span>
+                <span class="badge">Julia</span>
+                <span class="badge">Parallel Computing</span>
+                <span class="badge">ALICE O2 Framework</span>
+                <span class="badge">CERN ROOT</span>
+                <span class="badge"><i class="fas fa-chart-line"></i> Data Analysis</span>
+            </div>
+
+            <h3>Awards & Fellowships</h3>
+            <ul style="list-style-type: square; padding-left: 20px;">
+                <li><strong>Breakthrough Prize in Fundamental Physics (2025)</strong> – Awardee as a contributor to the ALICE Collaboration</li>
+                <li><strong>Junior Research Fellowship (JRF)</strong>, India (2022 – Present)</li>
+                <li><strong>Graduate Aptitude Test in Engineering (GATE)</strong> – Physics (2022)</li>
+                <li><strong>Ishan Uday Scholarship</strong> (2016 – 2019)</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <div id="citationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCitationModal()">&times;</span>
+            <h3 style="margin-top: 0;"><i class="fas fa-quote-right"></i> Citation Formats</h3>
+            <div class="citation-formats">
+                <button class="citation-format-btn active" onclick="showCitationFormat(this, 'bibtex')">BibTeX</button>
+                <button class="citation-format-btn" onclick="showCitationFormat(this, 'apa')">APA</button>
+                <button class="citation-format-btn" onclick="showCitationFormat(this, 'mla')">MLA</button>
+            </div>
+            <div id="citationContent"></div>
+            <button onclick="copyModalCitation()" style="width: 100%; padding: 10px; background: var(--accent-blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 15px;">
+                <i class="fas fa-copy"></i> Copy Citation
+            </button>
+        </div>
+    </div>
+
+    <button id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (localStorage.getItem('darkMode') === 'enabled' || (prefersDark && !localStorage.getItem('darkMode'))) {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Back to Top Button
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Citation Modal
+        const citationBtn = document.getElementById('citationBtn');
+        const citationModal = document.getElementById('citationModal');
+
+        const citations = {
+            bibtex: `@phdthesis{Barman2025,
+  author = {Barman, Banajit},
+  title = {Studies on light flavored particle production in RUN3 pp collisions using ALICE-TOF detector and MC data},
+  school = {Gauhati University},
+  year = {2025}
+}`,
+            apa: `Barman, B. (2025). Studies on light flavored particle production in RUN3 pp collisions using ALICE-TOF detector and MC data [Doctoral dissertation, Gauhati University].`,
+            mla: `Barman, Banajit. "Studies on Light Flavored Particle Production in RUN3 pp Collisions Using ALICE-TOF Detector and MC Data." Gauhati University, 2025.`
+        };
+
+        citationBtn.addEventListener('click', function() {
+            citationModal.style.display = 'block';
+            // Default select the first button when opening
+            const firstBtn = document.querySelector('.citation-format-btn');
+            showCitationFormat(firstBtn, 'bibtex');
+        });
+
+        // Fixed: Added 'btnElement' to correctly swap active states
+        function showCitationFormat(btnElement, format) {
+            const buttons = document.querySelectorAll('.citation-format-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if(btnElement) {
+                btnElement.classList.add('active');
+            }
+
+            const content = document.getElementById('citationContent');
+            content.innerHTML = `<div class="citation-box">${escapeHtml(citations[format])}</div>`;
+        }
+
+        function closeCitationModal() {
+            citationModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == citationModal) {
+                citationModal.style.display = 'none';
+            }
+        }
+
+        function copyModalCitation() {
+            const citationText = document.querySelector('#citationContent .citation-box').textContent;
+            navigator.clipboard.writeText(citationText).then(() => {
+                alert('Citation copied to clipboard!');
+            });
+        }
+
+        // Fixed: Robust copy logic to handle both BibTeX boxes and inline list items
+        function copyCitation(button) {
+            let textToCopy = "";
+
+            // Check if it's the BibTeX box or the inline list item
+            if(button.parentElement.classList.contains('citation-box')) {
+                textToCopy = button.parentElement.querySelector('.citation-text-content').textContent.trim();
+            } else if (button.parentElement.classList.contains('publication-item')) {
+                // Clone the list item, remove the button from the clone, and get the remaining text
+                const clone = button.parentElement.cloneNode(true);
+                clone.querySelector('button').remove();
+                textToCopy = clone.textContent.replace(/\s+/g, ' ').trim(); // cleans up extra spaces/newlines
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // CV Download
+        document.getElementById('cvBtn').addEventListener('click', function() {
+            const cvContent = `
+BANAJIT BARMAN
+PhD Researcher in Experimental High-Energy Physics
+Gauhati University, India
+Email: banajit.barman@cern.ch
+
+EDUCATION
+PhD in Experimental High-Energy Physics (Feb 2022 - Present)
+Gauhati University, India
+Supervisor: Prof. Buddhadeb Bhattacharjee
+
+MSc in Physics (2019 - 2021)
+Gauhati University, India
+Specialization: Nuclear Physics and Electronics
+
+BSc in Physics (2016 - 2019)
+Nalbari College, Gauhati University, India
+
+RESEARCH FOCUS
+Relativistic hadronic collisions experiments and phenomenology
+ALICE Collaboration at CERN
+Quantum Chromodynamics (QCD) Medium Analysis
+Light flavored particle production
+`;
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(cvContent.trim()));
+            element.setAttribute('download', 'Banajit_Barman_CV.txt');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        });
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>

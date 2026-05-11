@@ -23,7 +23,6 @@
             --particle-glow: rgba(37, 99, 235, 0.1);
         }
 
-        /* Fixed Smooth Scrolling natively via CSS */
         html {
             scroll-behavior: smooth;
             scroll-padding-top: 90px;
@@ -123,12 +122,25 @@
             gap: 6px;
             transition: all 0.3s ease;
             font-weight: 500;
+            text-decoration: none;
         }
 
         .control-btn:hover {
             background: var(--accent-blue);
             border-color: var(--accent-blue);
             transform: translateY(-2px);
+        }
+
+        /* Full-Screen Interactive Canvas */
+        #globalCollisionCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 999; /* Below nav, above most content */
+            pointer-events: none; /* Allows clicking links through the canvas */
+            opacity: 0.8;
         }
 
         /* Full-width Hero Section */
@@ -457,7 +469,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2em;
-            z-index: 999;
+            z-index: 2000;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
             transition: all 0.3s ease;
         }
@@ -559,41 +571,19 @@
             .hero h1 {
                 font-size: 2.5em;
             }
-
-            nav ul {
-                gap: 15px;
-            }
-
-            nav a {
-                font-size: 0.85em;
-            }
-
-            section {
-                padding: 25px;
-            }
-
-            h2 {
-                font-size: 1.4em;
-            }
-
-            .entry-header {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .nav-controls {
-                gap: 5px;
-                right: 10px;
-            }
-
-            .control-btn {
-                padding: 6px 10px;
-                font-size: 0.8em;
-            }
+            nav ul { gap: 15px; }
+            nav a { font-size: 0.85em; }
+            section { padding: 25px; }
+            h2 { font-size: 1.4em; }
+            .entry-header { flex-direction: column; gap: 5px; }
+            .nav-controls { gap: 5px; right: 10px; }
+            .control-btn { padding: 6px 10px; font-size: 0.8em; }
         }
     </style>
 </head>
 <body>
+
+    <canvas id="globalCollisionCanvas"></canvas>
 
     <nav>
         <ul>
@@ -610,7 +600,7 @@
         <button class="control-btn" id="citationBtn" title="Citation Formats">
             <i class="fas fa-quote-right"></i> Cite
         </button>
-        <a href="Banajit_Barman_CV.pdf" download class="control-btn" id="cvBtn" title="Download CV" style="text-decoration: none;">
+        <a href="Banajit_Barman_CV.pdf" download class="control-btn" id="cvBtn" title="Download CV">
             <i class="fas fa-file-pdf"></i> CV
         </a>
         <button class="control-btn" id="darkModeToggle" title="Toggle Dark Mode">
@@ -701,8 +691,6 @@
                     <span style="font-size: 0.9em;">ALICE Collaboration</span><br>
                     <a href="https://alice-publications.web.cern.ch/node/12688" class="content-link" target="_blank">Publication page</a> &bull;
                     <a href="https://alice-notes.web.cern.ch/system/files/notes/analysis/1445/2025-07-02-AnalysisNote_PiKaPr_13_6_TeV_LHC24_pass1_MinBias.pdf" class="content-link" target="_blank">Analysis note</a>
-
-
                 </li>
                 <li style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--accent-blue);">
                     <strong>Production and Nuclear Modification factor of light flavoured particles in OO collision at \(\sqrt{s_{NN}} = 5.36\) TeV</strong><br>
@@ -801,7 +789,180 @@
     </button>
 
     <script>
-        // Dark Mode Toggle
+        /* ---------------------------------------------------
+           Global Interactive Collision Animation (Curved Tracks)
+           --------------------------------------------------- */
+        const canvas = document.getElementById('globalCollisionCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            width = canvas.width;
+            height = canvas.height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let collisions = []; // Array to hold multiple concurrent collisions
+
+        // Spawns a new collision event at specific X,Y coordinates
+        function spawnCollision(x, y) {
+            collisions.push({
+                x: x,
+                y: y,
+                state: 'incoming',
+                nuclei: [
+                    { x: x - 150, y: y, vx: 6, radius: 20, color: 'rgba(248, 113, 113, 0.9)' },
+                    { x: x + 150, y: y, vx: -6, radius: 20, color: 'rgba(96, 165, 250, 0.9)' }
+                ],
+                particles: [],
+                flash: 0
+            });
+        }
+
+        // Generates the outgoing curved tracks
+        function createParticles(collision) {
+            const colors = ['#fbbf24', '#60a5fa', '#f87171', '#34d399', '#ffffff'];
+            // Create 70 tracks per collision
+            for(let i=0; i < 70; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2; // Initial momentum
+
+                // Simulate particle charge (+ or -) and magnetic field strength
+                // This determines how tight and in which direction the track curves
+                const charge = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 0.04 + 0.01);
+
+                collision.particles.push({
+                    x: collision.x,
+                    y: collision.y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    charge: charge,
+                    radius: Math.random() * 1.5 + 0.5,
+                    life: 1.0,
+                    decay: Math.random() * 0.01 + 0.005,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    // Store the history of the particle to draw a continuous line
+                    path: [{x: collision.x, y: collision.y}]
+                });
+            }
+            collision.flash = 1.0;
+        }
+
+        function drawNucleus(n) {
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+            ctx.fillStyle = n.color;
+            ctx.fill();
+
+            // Draw nucleons inside
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.beginPath(); ctx.arc(n.x - 4, n.y - 4, 5, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(n.x + 6, n.y + 2, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(n.x - 2, n.y + 6, 6, 0, Math.PI*2); ctx.fill();
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Loop backwards so we can safely remove finished collisions
+            for (let i = collisions.length - 1; i >= 0; i--) {
+                let c = collisions[i];
+
+                if (c.state === 'incoming') {
+                    c.nuclei[0].x += c.nuclei[0].vx;
+                    c.nuclei[1].x += c.nuclei[1].vx;
+
+                    drawNucleus(c.nuclei[0]);
+                    drawNucleus(c.nuclei[1]);
+
+                    // Check for impact
+                    if (c.nuclei[0].x + c.nuclei[0].radius >= c.nuclei[1].x - c.nuclei[1].radius) {
+                        c.state = 'exploding';
+                        createParticles(c);
+                    }
+                } else if (c.state === 'exploding') {
+                    // Flash effect
+                    if (c.flash > 0) {
+                        ctx.fillStyle = `rgba(255, 255, 255, ${c.flash * 0.5})`;
+                        ctx.beginPath();
+                        ctx.arc(c.x, c.y, 120, 0, Math.PI*2);
+                        ctx.fill();
+                        c.flash -= 0.08;
+                    }
+
+                    // Move and draw continuous curved tracks
+                    for (let j = c.particles.length - 1; j >= 0; j--) {
+                        let p = c.particles[j];
+
+                        // Apply magnetic Lorentz force (rotates the velocity vector)
+                        let newVx = p.vx + p.vy * p.charge;
+                        let newVy = p.vy - p.vx * p.charge;
+                        p.vx = newVx;
+                        p.vy = newVy;
+
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.life -= p.decay;
+
+                        // Save new position to the track path
+                        p.path.push({x: p.x, y: p.y});
+
+                        if (p.life <= 0) {
+                            c.particles.splice(j, 1);
+                        } else {
+                            // Draw the entire continuous track history
+                            ctx.beginPath();
+                            ctx.moveTo(p.path[0].x, p.path[0].y);
+                            for(let k = 1; k < p.path.length; k++) {
+                                ctx.lineTo(p.path[k].x, p.path[k].y);
+                            }
+                            ctx.strokeStyle = p.color;
+                            ctx.globalAlpha = p.life; // Fades the track as the particle loses energy
+                            ctx.lineWidth = p.radius;
+                            ctx.stroke();
+                            ctx.globalAlpha = 1.0;
+                        }
+                    }
+
+                    // Remove collision event when all tracks fade out
+                    if (c.particles.length === 0) {
+                        collisions.splice(i, 1);
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Start animation loop
+        animate();
+
+        // 1. Spawn initial collision in the center on load
+        setTimeout(() => spawnCollision(width / 2, 280), 300);
+
+        // 2. Click anywhere on the page to spawn a collision
+        window.addEventListener('click', (e) => {
+            spawnCollision(e.clientX, e.clientY);
+        });
+
+        // 3. Random background collisions every 5 seconds
+        setInterval(() => {
+            if(collisions.length < 2) {
+                spawnCollision(Math.random() * (width - 200) + 100, Math.random() * (height - 200) + 100);
+            }
+        }, 5000);
+
+
+        /* ---------------------------------------------------
+           Standard UI Scripts (Dark Mode, Modals, etc.)
+           --------------------------------------------------- */
+
         const darkModeToggle = document.getElementById('darkModeToggle');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -821,7 +982,6 @@
             }
         });
 
-        // Back to Top Button
         window.addEventListener('scroll', function() {
             const backToTop = document.getElementById('backToTop');
             if (window.pageYOffset > 300) {
@@ -838,7 +998,6 @@
             });
         }
 
-        // Citation Modal
         const citationBtn = document.getElementById('citationBtn');
         const citationModal = document.getElementById('citationModal');
 
@@ -853,14 +1012,13 @@
             mla: `Barman, Banajit. "Studies on Light Flavored Particle Production in RUN3 pp Collisions Using ALICE-TOF Detector and MC Data." Gauhati University, 2025.`
         };
 
-        citationBtn.addEventListener('click', function() {
+        citationBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent spawning a collision when opening the modal
             citationModal.style.display = 'block';
-            // Default select the first button when opening
             const firstBtn = document.querySelector('.citation-format-btn');
             showCitationFormat(firstBtn, 'bibtex');
         });
 
-        // Fixed: Added 'btnElement' to correctly swap active states
         function showCitationFormat(btnElement, format) {
             const buttons = document.querySelectorAll('.citation-format-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
@@ -876,11 +1034,16 @@
             citationModal.style.display = 'none';
         }
 
-        window.onclick = function(event) {
+        // Prevent clicks inside the modal from spawning collisions
+        document.querySelector('.modal-content').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        window.addEventListener('click', function(event) {
             if (event.target == citationModal) {
                 citationModal.style.display = 'none';
             }
-        }
+        });
 
         function copyModalCitation() {
             const citationText = document.querySelector('#citationContent .citation-box').textContent;
@@ -889,18 +1052,16 @@
             });
         }
 
-        // Fixed: Robust copy logic to handle both BibTeX boxes and inline list items
         function copyCitation(button) {
+            event.stopPropagation(); // Stop click from making a collision
             let textToCopy = "";
 
-            // Check if it's the BibTeX box or the inline list item
             if(button.parentElement.classList.contains('citation-box')) {
                 textToCopy = button.parentElement.querySelector('.citation-text-content').textContent.trim();
             } else if (button.parentElement.classList.contains('publication-item')) {
-                // Clone the list item, remove the button from the clone, and get the remaining text
                 const clone = button.parentElement.cloneNode(true);
                 clone.querySelector('button').remove();
-                textToCopy = clone.textContent.replace(/\s+/g, ' ').trim(); // cleans up extra spaces/newlines
+                textToCopy = clone.textContent.replace(/\s+/g, ' ').trim();
             }
 
             navigator.clipboard.writeText(textToCopy).then(() => {
@@ -912,49 +1073,8 @@
             });
         }
 
-        // CV Download
-        document.getElementById('cvBtn').addEventListener('click', function() {
-            const cvContent = `
-BANAJIT BARMAN
-PhD Researcher in Experimental High-Energy Physics
-Gauhati University, India
-Email: banajit.barman@cern.ch
-
-EDUCATION
-PhD in Experimental High-Energy Physics (Feb 2022 - Present)
-Gauhati University, India
-Supervisor: Prof. Buddhadeb Bhattacharjee
-
-MSc in Physics (2019 - 2021)
-Gauhati University, India
-Specialization: Nuclear Physics and Electronics
-
-BSc in Physics (2016 - 2019)
-Nalbari College, Gauhati University, India
-
-RESEARCH FOCUS
-Relativistic hadronic collisions experiments and phenomenology
-ALICE Collaboration at CERN
-Quantum Chromodynamics (QCD) Medium Analysis
-Light flavored particle production
-`;
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(cvContent.trim()));
-            element.setAttribute('download', 'Banajit_Barman_CV.txt');
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        });
-
         function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return text.replace(/[&<>"']/g, m => map[m]);
         }
     </script>

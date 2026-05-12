@@ -605,22 +605,49 @@
         }
 
         /* Responsive */
+        /* Responsive Layout for smaller screens */
         @media (max-width: 768px) {
+            /* Adjust scroll padding so the taller menu doesn't cover section titles */
+            html {
+                scroll-padding-top: 120px;
+            }
+
+            /* Make the navigation bar taller and push links down */
+            nav {
+                padding: 55px 0 15px 0; 
+            }
+            nav ul { 
+                gap: 10px 15px; 
+            }
+            nav a { 
+                font-size: 0.9em; 
+            }
+            
+            /* Center the control buttons perfectly at the top */
+            .nav-controls { 
+                top: 12px; 
+                right: 0; 
+                width: 100%; 
+                justify-content: center; 
+                gap: 15px; 
+            }
+            .control-btn { 
+                padding: 6px 15px; 
+                font-size: 0.85em; 
+            }
+
+            /* Keep your existing hero and section formatting */
             .hero-content {
                 flex-direction: column;
                 text-align: center;
                 gap: 30px;
             }
             .hero-text { text-align: center; }
-            .hero h1 { font-size: 3em; }
+            .hero h1 { font-size: 2.8em; }
             .hero .location, .social-links { justify-content: center; }
-            nav ul { gap: 15px; }
-            nav a { font-size: 0.85em; }
             section { padding: 25px; }
             h2 { font-size: 1.4em; }
             .entry-header { flex-direction: column; gap: 5px; }
-            .nav-controls { gap: 5px; right: 10px; }
-            .control-btn { padding: 6px 10px; font-size: 0.8em; }
         }
     </style>
 </head>

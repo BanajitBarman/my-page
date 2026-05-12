@@ -71,7 +71,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background-color: rgba(10, 25, 47, 0.95);
+            background-color: rgba(14, 59, 125, 0.95);
             backdrop-filter: blur(10px);
             padding: 15px 0;
             z-index: 1000;
@@ -90,7 +90,7 @@
         }
 
         nav a {
-            color: #cbd5e1;
+            color: #b8cde7;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95em;
@@ -814,6 +814,14 @@
                 <li><strong>Ishan Uday Scholarship</strong> (2016 – 2019)</li>
             </ul>
         </section>
+        <section id="visitors">
+            <h2><i class="fas fa-globe"></i> Global Reach</h2>
+            <p style="color: var(--text-muted); text-align: center;">Mapping visits from researchers and students around the world.</p>
+
+            <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; overflow: hidden; border-radius: 12px;">
+
+                </div>
+    </section>
 
     </div>
 
@@ -975,7 +983,6 @@
 
         animate();
 
-        // Helper function to keep collisions strictly in the middle of the side banks
         function getSideBankX(forceRight = false) {
             const containerWidth = 940;
             const sideMargin = (width - containerWidth) / 2;
@@ -991,10 +998,7 @@
             }
         }
 
-        // 1. Spawn initial collision strictly on the RIGHT side bank
         setTimeout(() => spawnCollision(getSideBankX(true), 350), 300);
-
-        // 2. Click to spawn (Restricted so you can't spawn them under the text cards)
         window.addEventListener('click', (e) => {
             const containerLeft = (window.innerWidth / 2) - 470;
             const containerRight = (window.innerWidth / 2) + 470;
@@ -1004,7 +1008,6 @@
             }
         });
 
-        // 3. Random background collisions every 5 seconds
         setInterval(() => {
             if(collisions.length < 2) {
                 spawnCollision(getSideBankX(false), Math.random() * (height - 200) + 100);
